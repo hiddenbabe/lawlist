@@ -1,0 +1,128 @@
+{% extends("mainlayout.html") %}
+{% block content %}
+<div class="row">
+   <div class="col-md-9">
+   <h1 class="ms-5 mt-3">Submit A Bid</h1>
+   </div>
+</div>
+<div class="container">
+   <div class="row main-content-post-job">
+      <div class="col-md-12">
+         {%for record in records%}
+            <div class="row">
+               <div class="col-md-8" style="border-right:1px solid #E0E0E0;">
+                  <h1>Job Details</h1>
+                  <h4 class="mt-5 text-dark">{{record.job_title}}</h4>
+                  {% if service_category %}
+                     {% for category in service_category %}
+                        <span class="me-2 text-light badge p-2 mt-1 mb-3" style="background-color:#03989E; font-weight: 100; font-size:0.9rem;">{{category}}</span>
+                     {% endfor %}
+                  {% endif%}
+                  <br>
+                  <p id="postcontent" class="p-2">{{record.req_description}}</p>
+                  <hr>
+                  <h4 class="text-dark ">Services Needed:</h4>
+                  {% if services%}
+                     {% for service in services%}
+                        {% if service.job_request_id==record.req_id %}
+                        <span class="me-2 text-light badge p-2 mt-1 mb-3" style="background-color:#03989E; font-weight: 100; font-size:0.9rem;">{{service.servicerequested.service_name}}</span>
+                        {%endif%}
+                     {% endfor %}
+                  {% endif%}
+                  
+               </div>
+               <div class="col-md-4 ">
+                  <div class="col-md-12 p-3 jobtimedeets mt-5">
+                     <p class="text-dark"><i class="fa-regular fa-clock"></i> Less than 20 hours a week</p>
+                     <p class="text-dark"><i class="fa-regular fa-calendar"></i> {{record.date_job_start}} - {{record.date_job_end}}</p>
+                     <p class="text-dark"><i class="fa-solid fa-money-bill-transfer"></i> &#x20A6;{{record.lowest_price}} - &#x20A6;{{record.highest_price}}</p>
+                     <p class="text-dark"><i class="fa-solid fa-location-dot"></i> {{record.requeststate.state_name}}, Nigeria</p>
+                     <p class="text-dark"><i class="fa-solid fa-users"></i> Active Bids:{{record.allbids|count()}}</p>
+                  </div>
+               </div>
+            </div>
+         {%endfor%}
+      </div>
+   </div>
+   <div class="row main-content-post-job mt-5">
+      
+      {%for record in records %}
+      <h1>Your Terms</h1>
+      <form method="post" action="/thelawlist/{{record.req_id}}/apply-now/" enctype="multipart/form-data">
+         <div class="row mt-4">
+         <div class="col-md-6">
+         {{form.bid.label (class_="text-dark mb-2")}}<em>(minimum &#x20A6;1000)</em><br>
+         <span>Clients's Budget: &#x20A6;{{record.lowest_price}} - &#x20A6;{{record.highest_price}}</span>
+         </div>
+         <div class="col-md-6 mb-5">
+         {{form.bid (class_="form-control text-center",min="1000.00",step="500")}}
+         {{form.csrf_token}}
+         </div>
+         <hr>
+         </div>
+         <div class="row mt-4">
+         <div class="col-md-6">
+            <p class="text-dark">10% Lawlist Service fee <a href="#" style="text-decoration:none;color:#03989E">What is this?</a></p>
+         </div>
+         <div class="col-md-6 mb-5">
+            <input type="text" class="form-control text-center" disabled value="" id="servicefee">
+         </div>
+         <hr>
+         </div>
+         <div class="row mt-4">
+            <div class="col-md-6">
+               <p class="text-dark">You'll receive</p>
+               <span><em>The amount you'll receive after service fees</em></span>
+            </div>
+            <div class="col-md-6 mb-5">
+               <input type="text" class="form-control text-center" disabled value="" id="reducedfee">
+            </div>
+            <hr>
+         </div>
+         <div class="row mt-4">
+            <div class="col-md-6">
+               {{form.cv.label (class_="text-dark")}} <em>(pdf files only)</em>
+            </div>
+            <div class="col-md-6">
+               {{form.cv (class_="form-control")}}
+            </div>
+            <div class="col-md-12 mt-5">
+               <p id="notapproved" class="text-danger"></p>
+               {% if details.user_id in bids%}
+               <p id="notapproved" class="text-success">You have submitted a bid for this job already.</p>
+               {% else %}
+               {{form.submit (class_="btn",id="applybtn")}}
+               {%endif%}   
+            </div>
+         </div>
+      </form>
+      {% endfor %}
+   </div>  
+</div>
+{% endblock %}
+{% block js%}
+<script type="text/javascript">
+   $(document).ready(function(){
+      $("#bid").change(function(){
+         let bid = $(this).val()
+         fee= (bid) * (10/100)
+         reduced = bid-fee
+         $("#servicefee").val(`-${fee}`)
+         $("#reducedfee").val(reduced)
+      })
+
+      if("{{details.status}}"=="Not Approved"){
+         $("#applybtn").attr("disabled","disabled")
+         
+      }
+      if("{{details.status}}"=="Not Approved"){
+         $("#notapproved").html("You need to complete your profile and your documents need to be approved to submit a bid.")
+      }
+
+      if("{{details.status}}"=="Suspended"){
+         $("#applybtn").attr("disabled","disabled")
+         $("#notapproved").html("Your account has been suspended temporarily, so you are not eligible to make a bid.")
+      }
+   })    
+</script>
+{% endblock %}

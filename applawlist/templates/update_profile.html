@@ -1,0 +1,129 @@
+{% extends "mainlayout.html"%}
+{% set msg = get_flashed_messages()%}
+{% block content %}
+<hr>
+<div class="row justify-content-center">
+<div class="col-md-6">
+<form action="{{url_for('update_profile')}}" method="post" class="justify-content-center updateform" enctype="multipart/form-data" >
+   <h1 class="text-center">Update Your Profile</h1>
+   <h3>Personal Informtion</h3>
+   {% if msg %}
+   {% for message in msg %}
+   {% if message == "Profile successfully updated."%}
+   <div class="alert alert-success">{{message}}</div>
+   {% else %}
+   <div class="alert alert-danger">{{message}}</div>
+   {%endif%}
+   {% endfor %}
+   {% endif %}
+   <hr>
+   {{ form.csrf_token }}
+   <div class="row justify-content-center">
+     <div class="col-md-7 mb-2">
+      {{form.email.label}}
+
+      {{form.email (class_="form-control",value=details.user_email)}}
+     </div>
+     <div class="col-md-7 mb-2">
+      {{form.phone.label}}
+
+      {{form.phone (class_="form-control",value=details.user_phone)}}
+     </div>
+     <div class="col-md-7 mb-2">
+      {{form.practice.label}}
+      <select name="practice" class="form-control" value="{{details.type_of_practice}}">
+         <option value="">-------------Select Practice-------------</option>
+         <option value="Single Practice">Single Practice</option>
+         <option value="Law Firm">Law Firm</option>
+      </select>
+     </div>
+     <div class="col-md-7">
+      <label class = 'form-label'>State of Residence :</label>
+      <select class = 'mb-3 form-control' name="state" id="state">
+         {% if states%}
+         {% for i in states %}
+         {% if i == details.user_state %}
+            <option value="{{i.state_id}}" selected="selected">{{i.state_name}}</option>
+         {% else %}
+            <option value="{{i.state_id}}">{{i.state_name}}</option>
+         {% endif %}
+         {% endfor %}
+         {% endif %}
+      </select>
+   </div>
+   <div class="mb-3 col-md-7">
+      <label class="form-label mt-2" name="lga">LGA:</label>
+         <select name ='lgas' class="form-control" id="lgas">
+            
+         </select>
+   </div>
+     <div class="col-md-7 mb-2">
+      {{form.firm.label}}
+
+      {{form.firm (class_="form-control",value=details.law_firm_name)}}
+     </div>
+     <div class="col-md-7 mb-2">
+      {{form.phone.label}}
+
+      {{form.phone (class_="form-control",value=details.user_phone)}}
+     </div>
+     <div class="col-md-7 mb-2">
+      {{form.dob.label}}
+
+      {{form.dob (class_="form-control",value=details.user_dob)}}
+     </div>
+     
+     <div class="col-md-7 mb-2">
+      {{form.pic.label}}
+
+      {{form.pic (class_="form-control",value=details.user_image)}}
+     </div>
+     <div class="col-md-7 mb-4">
+      <label class="text-dark">Year of Call to Bar</label>
+      <select id="calltobar" name="calltobar" class="form-control" value="{{details.call_to_bar_year}}">
+
+      </select>
+     </div>
+     <div class="col-md-7 mb-2 mt-3">
+
+      {{form.submit (class_="btn") }}
+      <a href="{{url_for('upload_certificates')}}" class="btn text-white">Upload Documents</a>
+     </div>
+</form>
+</div>
+</div>
+{% endblock %}
+{% block js %}
+<script>
+   $(document).ready(function(){
+      var years=""
+      for(var x=1900;x<=2022;x++){
+         if (x==Number("{{details.call_to_bar_year}}")){
+            years+= `<option value="${x}" selected>${x}</option>`
+         }else{
+            years+= `<option value="${x}">${x}</option>`
+         }
+        
+      }
+      $("#calltobar").html("<option value=''>Select Year</option>"+years)
+
+      $("#state").change(function(){
+         var selected_state = $(this).val()
+         var data2send = {"state":selected_state}
+         $.ajax({
+         url:"{{url_for('getlga')}}",
+         type:"get",
+         dataType: "text",
+         data: data2send,
+         success: function(msg){
+            $("#lgas").html(msg)
+         },
+         error: function(err){
+            console.log(err)
+         }
+      })
+      })
+   })
+
+</script>
+{% endblock %}

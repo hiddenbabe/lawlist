@@ -1,0 +1,166 @@
+{% extends("mainlayout.html") %}
+{% set msg = get_flashed_messages() %}
+{% block content %}
+<div class="container mt-3">
+   <div class="row main-content-post-job">
+      <div class="col-md-12">
+         {%for record in records%}
+            <div class="row">
+               <div class="col-md-8" style="border-right:1px solid #E0E0E0;">
+                  <h1>Job Details</h1>
+                  <h4 class="mt-5 text-dark">{{record.job_title}}</h4>
+                  {% if service_category %}
+                     {% for category in service_category %}
+                        <span class="me-2 text-light badge p-2 mt-1 mb-3" style="background-color:#03989E; font-weight: 100; font-size:0.9rem;">{{category}}</span>
+                     {% endfor %}
+                  {% endif%}
+                  <br>
+                  <p id="postcontent" class="p-2">{{record.req_description}}</p>
+                  <hr>
+                  <h4 class="text-dark ">Services Needed:</h4>
+                  {% if services%}
+                     {% for service in services%}
+                        {% if service.job_request_id==record.req_id %}
+                        <span class="me-2 text-light badge p-2 mt-1 mb-3" style="background-color:#03989E; font-weight: 100; font-size:0.9rem;">{{service.servicerequested.service_name}}</span>
+                        {%endif%}
+                     {% endfor %}
+                  {% endif%}
+                  
+               </div>
+               <div class="col-md-4 ">
+                  <div class="col-md-12 p-3 jobtimedeets mt-5">
+                     <p class="text-dark"><i class="fa-regular fa-clock"></i> Less than 20 hours a week</p>
+                     <p class="text-dark"><i class="fa-regular fa-calendar"></i> {{record.date_job_start}} - {{record.date_job_end}}</p>
+                     <p class="text-dark"><i class="fa-solid fa-money-bill-transfer"></i> &#x20A6;{{record.lowest_price}} - &#x20A6;{{record.highest_price}}</p>
+                     <p class="text-dark"><i class="fa-solid fa-location-dot"></i> {{record.requeststate.state_name}}, Nigeria</p>
+                     <p class="text-dark"><i class="fa-solid fa-users"></i> Active Bids:{{record.allbids|count()}}</p>
+                  </div>
+               </div>
+            </div>
+         {%endfor%}
+      </div>
+   </div>
+   <div class="row main-content-post-job mt-5">
+      <h1>All Bids</h1>
+      {% if bids%}
+      
+      <p class="mb-3"><em>Once you accept an offer, you can send a message to the lawyer and begin discussing details about your case.</em></p>
+      {% for message in msg %}
+      <div class="alert alert-success">{{message}}</div>
+      {% endfor%}
+      <table class="table table-hover">
+      <thead>
+      <tr>
+         <th>S/N</th>
+         <th>Fullname</th>
+         <th>Bid Price(&#x20A6;)</th>
+         <th>Practicing License</th>
+         <th>Year of Call To Bar</th>
+         <th>CV</th>
+         <th>Decision</th>
+         <th>Action</th>
+      </tr>
+      </thead>
+      <tbody>
+      {%for bid in bids %}
+      {% if bid.allrequests.requested_by==details.user_id and bid.bidder.status!="Suspended" %}
+         <tr class="p-4 mt-2">
+            <td>{{loop.index}}</td>
+            <td>{{bid.bidder.user_fname}} {{bid.bidder.user_lname}}</td>
+            <td>{{bid.bid_price}}</td>
+            <td>{{bid.bidder.status}}</td>
+            <td>{{bid.bidder.call_to_bar_year}}</td>
+            <td><a href="/static/uploads/{{bid.bidder_cv}}" class="btn">View CV</a></td>
+            <td class="decision">{{bid.bid_decision}}</td>
+            <td><button data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight{{bid.bidder.user_id}}" aria-controls="offcanvasRight" class="btnaccept">Accept Offer</button></td>
+         </tr>
+         <div class="offcanvas offcanvas-end fullpost" tabindex="-1" id="offcanvasRight{{bid.bidder.user_id}}" aria-labelledby="offcanvasRightLabel">
+            <div class="offcanvas-header">
+              <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+             
+              
+            </div>
+            <div class="offcanvas-body p-5 row">
+               <h1 class="text-center">Accept an Offer</h1>
+               <p class="text-center text-danger">Once you accept this offer all other offers will automatically be declined</p>
+               <form method="post" action="/approve-offer/{{bid.bid_id}}/{{bid.bidder_user}}/{{bid.request_id}}">
+                  <div id="error"></div>
+                  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                  <div class="form-group col-md-10">
+                    <h2 class="col-form-label text-dark">Recipient:{{bid.bidder.user_fname}} {{bid.bidder.user_lname}}</h2>
+                  </div>
+                  <div class="form-group mb-3 col-md-10">
+                    <label for="message-text" class="col-form-label text-dark"><span class="text-danger">*</span>Give {{bid.bidder.user_fname}} {{bid.bidder.user_lname}} more information about your case:</label>
+                    <textarea class="form-control" id="message-text" name="message"></textarea>
+                  </div>
+                  <div class="form-group mb-3 col-md-10">
+                     <label><span class="text-danger">*</span>How would you like to contact with {{bid.bidder.user_fname}} {{bid.bidder.user_lname}}?</label>
+                     <select id="contact" class="form-control" name="contactinfo">
+                        <option value="">Select</option>
+                        <option value="email">Email</option>
+                        <option value="number">Phone Number</option>
+                     </select>
+                     <p class="text-danger mt-2" id="info"></p>
+                   </div>
+                  <button class="btn" type="submit" id="acceptbtn">Accept Offer</button>
+               </form> 
+            </div>
+          </div>
+      {%else%}
+      <tr><td><h4 class="text-dark">No bids have been made for this job.</h4></td></tr>
+      {% endif %}
+      {% endfor %}
+      </tbody>
+      </table>
+      {% else %}
+      <h4 class="text-dark">No bids have been made for this job.</h4>
+      {% endif %}
+   </div>  
+</div>
+{% endblock %}
+{% block js %}
+<script>
+   $(document).ready(function(){
+      $("#contactinfo2")
+      $('.decision').each(function(i,item){
+         if($(item).html()=="Accepted"){
+            $(".btnaccept").attr("disabled","disabled")
+         }
+      })
+      
+      $("#contact").change(function(){
+         $("#info").text(`We will share your ${$(this).val()} with the bidder`)
+      })
+
+      $("#acceptbtn").click(function(){
+         var content = $("#message-text").val()
+         var contact = $("#contact").val()
+
+         if(content=="" || contact=="" || contactinfo==""){
+            event.preventDefault()
+            $("#error").html("<p class='alert alert-danger'>All fields are mandatory.</p>")
+         }else{
+            var id = $(this).attr("id")
+            $(".mainmsg").hide()
+            $(`#msg${id}`).show()
+            var message = id
+            var data2send = {"msgid":message}
+            $.ajax({
+            url:"{{url_for('read_message')}}",
+            type:"get",
+            dataType: "text",
+            data: data2send,
+            // success: function(msg){
+            //    $("#lgas").html(msg)
+            // },
+            error: function(err){
+               console.log(err)
+            }
+            })
+         }
+      })
+
+
+   })
+</script>
+{% endblock %}

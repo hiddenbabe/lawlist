@@ -1,0 +1,42 @@
+{% extends("mainlayout.html")%}
+{% block content %}
+<div class="row main-content-post-job mt-5">
+   <h1>Your Bids</h1>
+   <p class="mb-3"><em>All bids you make will be available here</em></p>
+   {% if bids%}
+   <table class="table table-hover p-5">
+   <thead>
+   <tr>
+      <th>S/N</th>
+      <th>Job Title</th>
+      <th>Job Description</th>
+      <th>Decision</th>
+      <th>Requested on</th>
+      <th>Action</th>
+      
+   </tr>
+   </thead>
+   <tbody>
+   {%for bid in bids %}
+      <tr class="p-5 mt-2">
+         <td class="p-4">{{loop.index}}</td>
+         <td class="p-4">{{bid.allrequests.job_title}}</td>
+         <td class="p-4">{{bid.allrequests.req_description}}</td>
+         {% if bid.bid_decision == "Accepted"%}
+         <td  class="p-4 text-success">{{bid.bid_decision}}</td>
+         {% else %}
+         <td  class="p-4 text-danger">{{bid.bid_decision}}</td>
+         {% endif %}
+         <td  class="p-4">{{bid.bid_date}}</td>
+         <td class="p-4"><a href="/deletebid/{{bid.bid_id}}" onclick="return confirm('Are you sure you want to delete this bid?')">Delete Bid</a></td>
+
+      </tr>
+      
+   {% endfor %}
+   </tbody>
+   </table>
+   {% else %}
+   <h4>No bids have been made for this job.</h4>
+   {% endif %}
+</div> 
+{% endblock %}

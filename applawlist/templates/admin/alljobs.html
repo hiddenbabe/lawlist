@@ -1,0 +1,41 @@
+{% extends("adminlayout.html")%}
+{% block content %}
+<div class="container">
+   <div >
+      {% if jobs %}
+         {%for job in jobs%}
+         <div class="row adminjob" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight{{job.req_id}}" aria-controls="offcanvasRight">
+            <div class="col-md-11">
+               <h4 class="mt-5 mb-5"><a href="#" class="jobtitle">{{job.job_title}}</a></h4> 
+               <p>Budget: &#x20A6;{{job.lowest_price}} - &#x20A6;{{job.highest_price}}</p>
+               <p>Est Duration of Job: {{job.date_job_start}} - {{job.date_job_end}}, 20hrs a Week</p> <p>Posted {{job.req_date}}</p>
+               <p><i class="fa-solid fa-location-dot"></i> {{job.requeststate.state_name}}, Nigeria</p>
+               <br>
+               <p id="postcontent">{{job.req_description}}</p>
+               {% if services%}
+                  {% for service in services%}
+                     {% if service.job_request_id==job.req_id %}
+                     <span class="me-2 text-light badge p-2 mt-1" style="background-color:#03989E; font-weight: 100; font-size:0.9rem;">{{service.servicerequested.service_name}}</span>
+                     {%endif%}
+                  {% endfor %}
+               {% endif%}
+               <p class="mt-2 text-dark">Posted By: {{job.servicerequester.user_fname}} {{job.servicerequester.user_lname}}</p>
+            </div>
+            <a href="/delete/{{job.req_id}}" class="btn btn-danger" onclick="confirm_delete()">Delete Post</a>
+         </div>
+         <hr>
+      {%endfor%}
+      {%endif%}
+   </div>
+</div>
+{%endblock%}
+{% block js %}
+<script>
+   function confirm_delete(event){
+      var rsp = confirm("Are you sure you want to delete this post?")
+      if(rsp==false){
+         event.preventDefault()
+      }
+   }
+</script>
+{%endblock%}

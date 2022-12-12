@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <link rel="preconnect" href="https://fonts.googleapis.com">
+   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+   <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@100&display=swap" rel="stylesheet">
+   <link href="https://fonts.googleapis.com/css2?family=Rubik&display=swap" rel="stylesheet">
+   <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet'>
+   <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@500&display=swap" rel="stylesheet">
+   <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab&display=swap" rel="stylesheet">
+   <link href = "/static/bootstrap/css/bootstrap.css" rel = "stylesheet" type = "text/css">
+   <link href = "/static/fontawesome/css/all.css" rel = "stylesheet" type = "text/css">
+   <link href = '/static/animate.min.css' type = 'text/css' rel = 'stylesheet'>
+   <link href = "/static/mainlayout.css" type = "text/css" rel = "stylesheet">
+   <link href = "/static/userpage.css" type = "text/css" rel = "stylesheet">
+
+
+   <title>{{title}} - The Lawlist</title>
+</head>
+<body>
+   <div class = 'container-fluid maindiv'>
+      <div class = 'row justify-content-between topnav'>
+            <div class="col-md-3 mt-3">
+               <img src="/static/images/logo2.png" class="logo">
+            </div>
+            <div class="col-md-8">
+               <nav class="mt-5">
+               <ul style="z-index:100">
+                  <li><a href = "{{url_for('userpage')}}" >My Dashboard</a></li>
+                  <li class="navmenu1"><a href = "#">Find Work</a>
+                     <div class="menudiv">
+                        <ul class="submenu1">
+                           <li><a href="{{url_for('available_jobs')}}">Available Jobs</a></li>
+                           <li><a href="{{url_for('my_bids')}}">My Bids</a></li>
+                           <li><a href="{{url_for('active_contracts')}}">Active Contracts</a></li>
+                        </ul> 
+                     </div>
+                  </li>
+                  <li class="navmenu2"><a href = "#">My Jobs</a>
+                     <div class="menudiv">
+                        <ul class="submenu2">
+                           <li><a href="{{url_for('jobs_posted')}}">Jobs posted</a></li>
+                           <li><a href="{{url_for('post_job')}}">Post Job</a></li>
+                           <li><a href="{{url_for('active_jobs')}}">Active Jobs</a></li>
+                         </ul> 
+                     </div>
+                  </li>
+                  <li class="navmenu3"><a href = "#">Transactions</a>
+                     <div class="menudiv">
+                        <ul class="submenu3">
+                           <li><a href="#">My Transactions</a></li>
+                           <li><a href="#">My Budget</a></li>
+                        </ul> 
+                     </div>
+                  </li>
+
+                  <li><a href = "{{url_for('messages')}}" >Messages {% if notifications|count() > 0%}<span class="badge" style="background-color:#F2712A;">{{notifications|count()}}</span>{% endif %}</a></li>
+                  {% if details.user_image %}
+                  <li><img src="/static/uploads/{{details.user_image}}"  class="user-pic" id="profile" onclick="togglemenu()"></li>
+                  {% else %}
+                  <li></li><i class="fa-regular fa-user user-icon text-dark" onclick="togglemenu()"></i></li>
+                  {% endif %}
+               </ul>
+               </nav>
+            </div> 
+               <div class="sub-menu-wrap"id="submenu">
+                  <div class="sub-menu">
+                     <div class="user-info">
+                        {% if details.user_image %}
+                        <img src="/static/uploads/{{details.user_image}}" class="user-pic">
+                        {% else %}
+                        <i class="fa-regular fa-user user-icon text-dark"></i>
+                        {% endif %}
+                        <h3>{{details.user_fname}} {{details.user_lname}}</h3>
+                     </div>
+                     
+                     <hr>
+                     <a href="{{url_for('update_profile')}}" class="sub-menu-link">
+                        <p>Edit Profile</p>
+                        <span>></span>
+                     </a>
+                     <a href="#" class="sub-menu-link">
+                        <p>Settings</p>
+                        <span>></span>
+                     </a>
+                     <a href="#" class="sub-menu-link">
+                        <p>Help</p>
+                        <span>></span>
+                     </a>
+                     <a href="{{url_for('log_out')}}" class="sub-menu-link">
+                        <p>Logout</p>
+                        <span>></span>
+                     </a>
+               
+                  </div>   
+               </div>
+      </div>
+      {% block content %}
+         
+      {% endblock %}
+      <footer class="footer mt-5">
+         <div class="row justify-content-center p-3">
+               <div class="col-md-3 p-5">
+                  <ul class="footer-list">
+                     <li class="mb-2"><a href="#" target="_self" class="footer-list-link">About Us</a></li>
+                     <li class="mb-2"><a href="#" target="_self" class="up-footer-list-link">Feedback</a></li>
+                     <li class="mb-2"><a href="#" target="_self" class="footer-list-link">Community</a></li>
+                  </ul>
+               </div>
+               <div class="col-md-3 p-5">
+                  <ul class="footer-list">
+                     <li class="mb-2"><a href="#" target="_self" class="footer-list-link">Terms of Service</a></li>
+                     <li class="mb-2"><a href="#" target="_self" class="footer-list-link">Privacy Policy</a></li>
+                     <li class="mb-2"><a href="#" target="_self" class="footer-list-link">Help &amp; Support</a></li>
+                  </ul>
+               </div>
+               <div class="col-md-3 p-5">
+                  <ul class="footer-list">
+                     <li class="mb-2"><a href="#" target="_self" class="footer-list-link">Accessibility</a></li>
+                     <li class="mb-2"><a href="#" target="_self" class="footer-list-link">Cookie Policy</a></li>
+                     <li class="mb-2"><a href="#" target="_self" class="footer-list-link">Cookie Settings</a></li>
+                  </ul>
+               </div>
+               <hr>
+               <div class="col-md-12 text-center mt-3">
+                  © 2022 The Lawlist.®
+               </div>
+         </div>
+      </footer>
+   </div> 
+   
+
+   <script src = "/static/jquery.min.js"></script>
+   <script src = "/static/bootstrap/js/bootstrap.bundle.js"></script>
+   <script type = 'text/javascript'>
+      let submenu = document.getElementById("submenu");
+
+      function togglemenu(){
+         submenu.classList.toggle("open-menu");
+      }
+
+      $("document").ready(
+         function(){
+            $(".navmenu1").hover(
+               function(){
+                  $(".submenu1").addClass("open-menu")
+               }, function(){
+                  $(".submenu1").removeClass("open-menu")
+            });
+
+            $(".navmenu2").hover(
+               function(){
+                  $(".submenu2").addClass("open-menu")
+               }, function(){
+                  $(".submenu2").removeClass("open-menu")
+            });
+
+            
+            $(".navmenu3").hover(
+               function(){
+                  $(".submenu3").addClass("open-menu")
+               }, function(){
+               $(".submenu3").removeClass("open-menu")
+            });
+         
+         }
+         
+
+      )
+   </script>
+{% block js %}
+{% endblock %}
+</body>
+</html>

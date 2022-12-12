@@ -1,0 +1,46 @@
+{% extends("mainlayout.html") %}
+{% block content %}
+{% set msg = get_flashed_messages()%}
+<div class="row justify-content-center">
+   <div class="col-md-6 updateform">
+      <h1 class="text-center mb-3">Verify Your Documents</h1>
+      <span><em>In order to start providing services to other lawyers you need to verify your practicing documents and licences</em></span>
+      <hr>
+      {% for message in msg %}
+      {% if "No" in message%}
+      <div class="alert alert-danger">{{message}}</div>
+      {% else %}
+      <div class="alert alert-success">{{message}}</div>
+      {%endif%}
+      {% endfor %}
+      
+      <div class="row justify-content-center">
+         {% if details.status=="Not Approved"%}
+        <div class="col-md-7 mb-4">
+         <form action="/thelawlist/update-profile/certificates/license-receipt" method="post" enctype="multipart/form-data" class="justify-content-center">
+            {{ form.csrf_token }}
+         {{form.licensercpt .label (class_="text-dark")}} <em>(pdf files only)</em>
+         {{form.licensercpt (class_="form-control",accept="application/pdf")}}
+         <button class="btn  mt-2">Upload</button>
+         </form>
+        </div>
+        <div class="col-md-7 mb-4">
+         <form action="/thelawlist/update-profile/certificates/bar-certificate" method="post" enctype="multipart/form-data" class="justify-content-center">
+            {{ form.csrf_token }}
+         {{form.bar_certificate.label (class_="text-dark")}} <em>(pdf only)</em>
+   
+         {{form.bar_certificate (class_="form-control",accept="application/pdf")}}
+         <button class="btn  mt-2">Upload</button>
+         </form>
+        </div>
+        {% else %}
+        <div class="col-md-7 mb-4">
+         <h3 class="text-success">All your documents are approved and you are elgible to bid for jobs.</h3>
+        </div>
+        {%endif%} 
+      </div>
+   </div>
+   </div>
+ 
+{% endblock %}
+

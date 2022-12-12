@@ -1,0 +1,43 @@
+{% extends("mainlayout.html")%}
+{% set msg = get_flashed_messages()%}
+{% block content %}
+<div class="row">
+   <div class="col-md-9">
+   <h1 class="ms-5 mt-5">Job Postings</h1>
+   </div>
+</div>
+<div class="container">
+<div class="row main-content-post-job ">
+   <div class="col-md-12">
+      {%for message in msg%}
+      <div class="alert alert-danger">{{message}}</div>
+      {% endfor %}
+      {% if jobs %} 
+         {%for job in jobs%}
+         <div class="row job">
+            <div class="col-md-12">
+               <h4 class="mt-5"><a href="#" class="jobtitle">{{job.job_title}}</a></h4>
+               <p>Services Needed:
+                  {% for s in job.requestedservice %}
+                  {{s.service_name}} 
+                  {%endfor%}
+               </p>
+               <p>Budget: &#x20A6;{{job.lowest_price}} - &#x20A6;{{job.highest_price}}</p>
+               <p>Est Time: {{job.date_job_start}} - {{job.date_job_end}}, 20hrs a Week</p> <p>Posted {{job.req_date}}</p>
+               <p><a href="/thelawlist/job-bids/{{job.req_id}}">Bids:{{job.allbids|count()}}</a></p>
+               
+
+            </div>
+         </div>
+         <hr>
+         {% endfor%}
+         {% else%}
+         <h3>Jobs you posts will appear here</h3>
+         <em><a href="{{url_for('post_job')}}" style="text-decoration:none;">Post your first job</a></em>
+      {%endif%}
+      
+   </div>
+   
+</div>
+</div>
+{%endblock%}

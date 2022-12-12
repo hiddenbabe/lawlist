@@ -1,0 +1,35 @@
+{% extends("mainlayout.html")%}
+{% block content %}
+<div class="row">
+<div class="col-md-9">
+<h1 class="ms-5 mt-3" style="display:inline-block">Active Contracts</h1>
+</div>
+<div class="col-md-3">
+   <h2 class="ms-5 mt-3" style="display:inline-block">Your Earnings: &#x20A6;0.0</h2>
+</div>
+</div>
+<div class="row main-content-post-job">
+   <div class="col-md-12">
+      <div class="jobs">
+         {% if contractss %}
+            {%for contact in jobs%}
+            <div class="row job">
+               <div class="col-md-12">
+                  <h3 class="mt-5"><a href="#" class="jobtitle">{{contract.allrequests.job_title}}</a></h3>
+                  <p>Agreed Price: {{contract.bid_price}}</p>
+                  <p>Est Time: {{contract.allrequests.date_job_start}} - {{contract.allrequests.date_job_end}}, 20hrs a Week</p> 
+                  <p>Posted {{job.req_date}}</p>
+                  <br>
+                  <p>Hired By: {{contract.allrequests.requested_by}}</p>
+                  <p>Status: {{contract.jobprogress.job_progress}}</p>
+               </div>
+            </div>
+            <hr>
+            {% endfor%}
+            {% else %}
+            <p class="mt-1">Contracts you are working on will appear here. <a href="{{url_for('available_jobs')}}"> Search for available jobs here!</a></p>
+         {%endif%}
+      </div>
+   </div>
+</div>
+{%endblock%}

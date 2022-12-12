@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <link rel="preconnect" href="https://fonts.googleapis.com">
+   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+   <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@100&display=swap" rel="stylesheet">
+   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap" rel="stylesheet">
+   <link href="https://fonts.googleapis.com/css2?family=Rubik&display=swap" rel="stylesheet">
+   <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@500&display=swap" rel="stylesheet">
+   <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab&display=swap" rel="stylesheet">
+   <link href = "/static/bootstrap/css/bootstrap.css" rel = "stylesheet" type = "text/css">
+   <link href = "/static/fontawesome/css/all.css" rel = "stylesheet" type = "text/css">
+   <link href = '/static/animate.min.css' type = 'text/css' rel = 'stylesheet'>
+   <link href = "/static/index.css" type = "text/css" rel = "stylesheet">
+   <link href = "/static/mainlayout.css" type = "text/css" rel = "stylesheet">
+ 
+
+   <title>Home - The Lawlist</title>
+</head>
+<body>
+   <div class = 'container-fluid'>
+      <div class = 'row justify-content-between'>
+         <div class = 'col-md-9'>
+            <a href="#"><img src="/static/images/logo.png" alt="thelawlistlogo" style = "height:150px" class = 'img-fluid'></a>
+         </div>
+         <div class = 'col-md-3 mt-5' id = 'loginsignup'>
+            <a href = "{{url_for('login')}}" class = 'btn me-2' id = 'login'>LOGIN</a>
+            <a href = "{{url_for('signup')}}" id = 'signup' class = 'btn'>SIGN UP</a>
+         </div>
+      </div>
+      <div class = 'row position-relative'id = 'secondrow' style="background-color:#74C5AF">
+         <div class = 'col-md-5'>
+            <div id = 'innerdiv' class="col-md-4 animate__animated animate__fadeInUp">
+            <h1 >A Law Community Like No Other<span style ='color:#F85A40'>.</span></h1>
+            <p class ='animate__animated'id = 'para1'>Make working easier by outsourcing ad-hoc legal services with our network of leading lawyers across Nigeria.</p>
+            <div id = 'loginsignup'>
+               <a href = "{{url_for('login')}}" class = 'btn' >Become a Lawlister</a>
+               <a href = "{{url_for('signup')}}" class = 'btn'>Sign in to your account</a>
+            </div>
+            </div>
+         </div>
+         <div class = "col-md-6"style = "height:100%">
+            <img src = "/static/images/img1.png" class = "img-fluid"style = "height:100%">
+         </div>
+      </div>
+      <div class="row howitworks">
+         <div class="col-md-12 mt-4">
+            <p class="heading1 text-dark text-center mt-3 animate__animated animate__fadeInUp">The Lawlist is the leading outsourcing app for lawyers across Nigeria.</p>
+         </div>
+         <div class="container p-5">
+            <h3 class="mb-2">Start with 3 easy steps:</h3>
+            <div class="row mt-3 justify-content-between text-center">
+            <div class="col-md-3 stepsdiv animate__animated animate__fadeInDown">
+            <p class="steps ">1. Register your account.</p>
+            <img src="/static/images/imglogin2.png" class="img-fluid" width="250" height="250">
+            </div>
+            <div class="col-md-3 stepsdiv animate__animated animate__fadeInUp">
+               <p class="steps">2. Get verified as a lawyer.</p>
+               <img src="/static/images/files.png" class="img-fluid" width="300" height="300">
+            </div>
+            <div class="col-md-3 stepsdiv animate__animated animate__fadeInDown">
+               <p class="steps">3. Start posting ad hoc service ads/providing ad hoc services.</p>
+               <img src="/static/images/post.png" class="img-fluid" width="250" height="250">
+            </div>
+            </div>
+         </div>
+      </div>
+      <hr>
+      <div class="row">
+         <footer class="footer mt-5">
+            <div class="row justify-content-center p-3">
+                  <div class="col-md-3 p-5">
+                     <ul class="footer-list">
+                        <li class="mb-2"><a href="#" target="_self" class="footer-list-link">About Us</a></li>
+                        <li class="mb-2"><a href="#" target="_self" class="up-footer-list-link">Feedback</a></li>
+                        <li class="mb-2"><a href="#" target="_self" class="footer-list-link">Community</a></li>
+                     </ul>
+                  </div>
+                  <div class="col-md-3 p-5">
+                     <ul class="footer-list">
+                        <li class="mb-2"><a href="#" target="_self" class="footer-list-link">Terms of Service</a></li>
+                        <li class="mb-2"><a href="#" target="_self" class="footer-list-link">Privacy Policy</a></li>
+                        <li class="mb-2"><a href="#" target="_self" class="footer-list-link">Help &amp; Support</a></li>
+                     </ul>
+                  </div>
+                  <div class="col-md-3 p-5">
+                     <ul class="footer-list">
+                        <li class="mb-2"><a href="#" target="_self" class="footer-list-link">Accessibility</a></li>
+                        <li class="mb-2"><a href="#" target="_self" class="footer-list-link">Cookie Policy</a></li>
+                        <li class="mb-2"><a href="#" target="_self" class="footer-list-link">Cookie Settings</a></li>
+                     </ul>
+                  </div>
+                  <hr>
+                  <div class="col-md-12 text-center mt-3">
+                     © 2022 The Lawlist.®
+                  </div>
+               </div>
+               </footer>
+      </div>
+   </div>
+
+<script src = jquery.min.js></script>
+<script src = "bootstrap/js/bootstrap.bundle.js"></script>
+<script type = 'text/javascript'>
+   
+</script>
+</body>
+</html>

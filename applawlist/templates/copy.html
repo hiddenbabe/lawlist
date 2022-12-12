@@ -1,0 +1,116 @@
+{% extends("mainlayout.html")%}
+{% block content %}
+<div class="accordion" id="accordionExample">
+   <div class="accordion-item">
+     <h2 class="accordion-header" id="headingOne">
+       <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+         
+       </button>
+     </h2>
+     <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+       <div class="accordion-body">
+         
+       </div>
+     </div>
+   </div>
+   
+ </div>
+
+   <div class="row">
+      <div class="col-md-12">
+      <h4 class="p-2 text-dark">Messages Received</h4>
+      </div>
+      {% if msg %}
+      <div class="col-md-3 leftmsg" >
+         {%for message in msg%}
+         <div class="row ">
+            <div class="msg col-md-12 p-2" id="{{message.message_id}}">
+               <span class="text-dark" style="font-size:1.2rem">{{message.user_sending.user_fname}}&nbsp;{{message.user_sending.user_lname}}</span>
+               <p>{{message.content}}</p>
+            </div>
+         </div> 
+         {% endfor %}
+      </div>
+      {% for message in msg%}
+      <div class="col-md-8 mainmsg position-relative" id="msg{{message.message_id}}">
+         <div class="row">
+            <div class="col-md-12">
+               <div class="msgheader text-center">
+               <p class="text-dark" style="font-size:2rem">{{message.user_sending.user_fname}}&nbsp;{{message.user_sending.user_lname}}</p>
+               </div>
+               <div class="container">
+                  <div class="container">
+                  <div class="row">
+                     <div class="col-md-8" style="border-right:1px solid #E0E0E0;">
+                        <h1>Job Details</h1>
+                        <h4 class="mt-5 text-dark">{{message.jobmsg.allrequests.job_title}}</h4>
+                        {% if service_category %}
+                           {% for category in service_category %}
+                              <span class="me-2 text-light badge p-2 mt-1 mb-3" style="background-color:#03989E; font-weight: 100; font-size:0.9rem;">{{category}}</span>
+                           {% endfor %}
+                        {% endif%}
+                        <br>
+                        <p id="postcontent" class="p-2">{{message.jobmsg.allrequests.req_description}}</p>
+                        <hr>
+                        
+                        
+                     </div>
+                     <div class="col-md-4 ">
+                        <div class="col-md-12 p-3 jobtimedeets mt-5">
+                           <p class="text-dark"><i class="fa-regular fa-calendar"></i> {{message.jobmsg.allrequests.date_job_start}} - {{message.jobmsg.allrequests.date_job_end}}</p>
+                           <p class="text-dark"><i class="fa-solid fa-location-dot"></i> {{message.jobmsg.allrequests.requeststate.state_name}}, Nigeria</p>
+                           <h4 class="text-dark ">Services Needed:</h4>
+                        <ul>
+                           {% if services%}
+                              {% for service in services%}
+                                 {% if service.jobs_req_service.job_request_id==message.jobmsg.allrequests.req_id %}
+                                 <li>{{service.service_name}}</li>
+                                 {%endif%}
+                              {% endfor %}
+                           {% endif%}
+                        </ul>
+                        </div>
+                     </div>
+                  </div>
+                  </div>
+               <div class="row">
+               <div class="col-md-12 mt-3">
+               <div class="msgcontent" class="mb-3">
+               <p class="p-3">{{message.content}}</p>
+               </div>
+               {% if message.contactinfo == "email"%}
+               <a href="mailto:{{message.user_sending.user_email}}" class="btn">Send {{message.user_sending.user_fname}}&nbsp;{{message.user_sending.user_lname}} an email</a>
+               {% else %}
+               <p class="text-dark">Contact Number: {{message.user_sending.user_phone}}</p>
+               
+               {% endif %}
+
+               </div>
+               </div>
+               </div> 
+            </div>
+         </div>
+      </div>
+      {% endfor %}
+      {% else %}
+
+      <h2>You do not have any messages yet.</h2>
+      {% endif %}
+   </div>
+{% endblock %}
+{% block js %}
+<script>
+   
+   $(document).ready(function(){
+      $(".mainmsg").hide()
+
+      $(".msg").click(function(){
+         var id = $(this).attr("id")
+         $(".mainmsg").hide()
+         $(`#msg${id}`).show()
+         
+      })
+      
+   })
+</script>
+{% endblock %}

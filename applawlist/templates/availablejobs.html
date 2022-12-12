@@ -1,0 +1,176 @@
+{% extends("mainlayout.html") %}
+{% block content %}
+
+<div class="container">
+<h1 id="title" class="ms-5 mt-3">All Available Jobs</h1>
+<div class="row main-content-post-job">
+   <div class="col-md-12">
+      <div class="form-popup" id="myForm">
+         <form action="/changestate/{{details.user_id}}" class="form-container">
+            <select class = 'mb-3 col-md-4 required mt-2' name="state" id="state" required>
+               {% if states%}
+               {% for i in states %}
+                  <option value="{{i.state_id}}" class="text-center">{{i.state_name}}</option>
+               {% endfor %}
+               {% endif %}
+            </select>
+            <button class="btn changestatebtn">Change Location</button>
+           <i class="fa-solid fa-x cancel" onclick="closeForm()"></i>
+         </form>
+       </div>
+      <li class="navmenu4 btn"><a href = "#" id="filter">Filter</a>
+         <div class="menudiv1">
+            <ul class="submenu4 mt-2">
+               <li id="location" class="p-2"><a href="#">My Location</a></li>
+            </ul> 
+         </div>
+      </li>
+      <hr>
+      <div class="jobs">
+         {% if jobs %}
+            {%for job in jobs%}
+            {% if job.servicerequester.status != "Suspended"%}
+            <div class="row job" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight{{job.req_id}}" aria-controls="offcanvasRight">
+               <div class="col-md-11">
+                  <h4 class="mt-5 mb-5"><a href="#" class="jobtitle">{{job.job_title}}</a></h4>
+                     
+                  <p>Budget: &#x20A6;{{job.lowest_price}} - &#x20A6;{{job.highest_price}}</p>
+                  <p>Est Duration of Job: {{job.date_job_start}} - {{job.date_job_end}}, 20hrs a Week</p> <p>Posted {{job.req_date}}</p>
+                  <p><i class="fa-solid fa-location-dot"></i> {{job.requeststate.state_name}}, Nigeria</p>
+                  <br>
+                  <p id="postcontent">{{job.req_description}}</p>
+                  {% if services%}
+                     {% for service in services%}
+                        {% if service.job_request_id==job.req_id %}
+                        <span class="me-2 text-light badge p-2 mt-1" style="background-color:#03989E; font-weight: 100; font-size:0.9rem;">{{service.servicerequested.service_name}}</span>
+                        {%endif%}
+                     {% endfor %}
+                  {% endif%}
+                  <p class="mt-2">Bids:{{job.allbids|count()}}</p>
+               </div>
+            </div>
+            <hr>
+            <div class="offcanvas offcanvas-end fullpost" tabindex="-1" id="offcanvasRight{{job.req_id}}" aria-labelledby="offcanvasRightLabel">
+               <div class="offcanvas-header">
+                 <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+               </div>
+               <div class="offcanvas-body p-5">
+                  <div class="container mt-2">
+                    
+                     <div class="row">
+                        <div class="col-md-9">
+                           <div class="row jobcontent">
+                              <div class="col-md-12 p-4">
+                                 <h3>{{job.job_title}}</h3>
+                              </div>
+                              <div class="col-md-12 p-4">
+                                 <p>Posted {{job.req_date}}</p>
+                                 <p><i class="fa-solid fa-location-dot"></i> {{job.requeststate.state_name}}, Nigeria</p>
+                              </div>
+                           </div>
+                           <div class="row jobheader jobcontent">
+                              <div class="col-md-12 p-3">
+                                 <p>{{job.req_description}}</p>
+                              </div>
+                           </div>
+                           <div class="row jobheader jobcontent">
+                              <div class="col-md-12 p-3 jobtimedeets">
+                                 <div class="row">
+                                 <div class="col-md-5">
+                                 <p class="text-dark"><i class="fa-regular fa-clock"></i> Less than 20 hours a week</p>
+                                 </div>
+                                 <div class="col-md-5">
+                                 <p class="text-dark"><i class="fa-regular fa-calendar"></i> {{job.date_job_start}} - {{job.date_job_end}}</p>
+                                 </div>
+                                 <div class="col-md-5">
+                                    <p class="text-dark"><i class="fa-solid fa-money-bill-transfer"></i> &#x20A6;{{job.lowest_price}} - &#x20A6;{{job.highest_price}}</p>
+                                    </div>
+                                 </div>
+                              </div>
+                           </div>
+                           <div class="row jobheader jobcontent">
+                              <div class="col-md-12 p-3">
+                                 <p>Services Needed:</p>
+                                 <ul>
+                                    {% if services%}
+                                       {% for service in services%}
+                                          {% if service.job_request_id==job.req_id %}
+                                          <li>{{service.servicerequested.service_name}}</li>
+                                          {%endif%}
+                                       {% endfor %}
+                                    {% endif%}
+                                 </ul>
+                              </div>
+                           </div>
+                        </div>
+                        <div class="col-md-3">
+                           <button class="applybtn mt-5 p-2"><a href="/thelawlist/{{job.req_id}}/apply-now/" class="text-light" style="text-decoration:none;">Apply Now</a></button>
+                        </div>
+                     </div>
+                 </div>
+               </div>
+             </div>
+             {%endif%}
+            {% endfor%}
+         {%endif%}
+      </div>
+      <div id="jobs2">
+         
+      </div>
+   </div>
+</div>
+</div>
+
+
+{%endblock%}
+{% block js %}
+<script>
+   function openForm() {
+  document.getElementById("myForm").style.display = "block";
+}
+
+function closeForm() {
+  document.getElementById("myForm").style.display = "none";
+}
+
+   $("document").ready(function(){
+      $("#jobs2").hide()
+      $(".navmenu4").click(
+            function(){
+               $(".submenu4").toggleClass("open-menu")
+            })
+        
+      $("#location>a").click(
+         function(){
+         $("#jobs2").show()
+         $("#title").html("Jobs in {{details.userstate.state_name}} <a href='#' style='font-size:0.9rem' onclick='openForm()''><em>Change location</em></a>")
+         // $(".job").hide()
+
+         var user= "{{details.user_state}}"
+         var data2send = {"userstate":user}
+
+         $.ajax({
+         url:"{{url_for('change_jobs')}}",
+         type:"get",
+         dataType: "text",
+         data: data2send,
+         success: function(msg){
+            $(".jobs").html(msg)
+         },
+         error: function(err){
+            console.log(err)
+         }
+         
+      })
+      }
+         
+      )
+      
+      $(".changestatebtn").click(function(){
+        
+      })
+
+
+   })
+</script>
+{% endblock %}

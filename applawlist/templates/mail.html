@@ -1,0 +1,22 @@
+{% extends("mainlayout.html")%}
+{% block content %}
+{% set m = get_flashed_messages()%}
+<div class="container">
+   <div class="row">
+      <div class="col-md-9">
+         {% for message in m %}
+         <p class="alert alert-success">{{message}}</p>
+         {%endfor%}
+         <form action="/sendemail/" method="post">
+            <input type="hidden" value="{{csrf_token()}}" name="csrf_token">
+            <label>Enter email</label>
+            <input type="email" name="email" class="form-control">
+            <button class="btn">Send</button>
+         </form>
+         <div style='background-color:#03989E;color:white;padding:3%'><h1 style="color:white;">The Lawlist<span style="color:#F2712A;">.</span></h1><div style="background-color:white; padding:1%; border-radius: 20px; color:black;"><h4>Welcome to the Lawlist! Thank you for joining us.</h4></div></div>
+      </div>
+   </div>
+</div>
+
+
+{% endblock %}

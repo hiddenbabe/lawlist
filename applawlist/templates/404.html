@@ -1,0 +1,12 @@
+{%extends("mainlayout.html")%}
+{% block content %}
+<div class="container mt-3">
+   <div class="row main-content-post-job">
+      <h3 class="text-dark">The page you are looking for is not available.</h3>
+      <p><a href="{{ url_for('home') }}">Go to dashboard</a></p>
+      <div class="col-md-12">
+      <img src="/static/images/404err.png" class="img-fluid" width="100%" alt="error">
+      </div>
+   </div>
+</div>
+{% endblock %}

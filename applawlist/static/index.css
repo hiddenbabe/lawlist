@@ -1,0 +1,98 @@
+@media screen and  (min-width: 1024px){			
+   #innerdiv{
+      position: absolute;
+      top:20%;
+      left:5%
+   }
+
+   #secondrow{
+      min-height:600px
+   }
+
+} 
+
+ul[role='list'],
+ol[role='list'],
+li {
+   list-style: none;
+}
+
+body{
+   font-family: 'Montserrat';
+   font-weight: bold;
+}
+
+#dropdownmenu1 li nav-link:hover{
+   background-color: #03989E;
+}
+
+.nav-link{
+   color:black
+}
+
+.nav-link:hover{
+   color:#03989E;
+}
+
+#loginsignup a{
+   text-decoration: none;
+   color: white;
+   font-family: 'Montserrat';
+   font-weight:bold;
+}
+
+#innerdiv h1{
+   font-family: 'Roboto Slab', serif;
+   font-weight: bold;
+   font-size: 3rem;
+   color: #fff;
+}
+
+#innerdiv p{
+   font-size:1.2rem;
+   color:#000;
+}
+
+#secondrow{
+   background-color:#74C5AF;
+}
+
+.btn{
+   background-color:#F2712A;
+}
+
+a{
+   color: white;
+   
+}
+
+.howitworks{
+   background-color: #fff;
+}
+
+#signup:hover,#login:hover{
+   color:black
+}
+
+#signup,#login{
+   transition:0.5s;
+   font-size:1.2rem;
+   box-shadow: 0 0 3px grey;
+}
+
+.heading1{
+   font-family: 'Montserrat';
+   font-size:2rem;
+}
+
+.steps{
+   font-size:1.2rem;
+   color:#000;
+   font-weight: 100;
+   margin-top:20px;
+}
+
+.stepsdiv{
+   box-shadow: 2px 2px 5px;
+   border-radius: 20px;
+}

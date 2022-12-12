@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <link rel="preconnect" href="https://fonts.googleapis.com">
+   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+   <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet'>
+   <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@100&display=swap" rel="stylesheet">
+   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk&display=swap" rel="stylesheet">
+   <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab&display=swap" rel="stylesheet">
+   <link href = "/static/bootstrap/css/bootstrap.css" rel = "stylesheet" type = "text/css">
+   <link href = "/static/fontawesome/css/all.css" rel = "stylesheet" type = "text/css">
+   <link href = '/static/animate.min.css' type = 'text/css' rel = 'stylesheet'>
+
+   <title>{{name}} - The Lawlist</title>
+</head>
+<style type = 'text/css'>
+   @media screen and  (min-width: 1024px){			
+      #loginsignup{
+         position:absolute;
+         top:50px;	
+         /* left:25% */
+      }
+   }
+
+   @media screen and  (min-width: 1024px){			
+      #logo{
+		height: 1090px;
+      }
+   }
+
+   @media screen and  (min-width: 1024px){			
+      #logoinner{
+		position: absolute;
+      top:250px;
+      left:45px
+      }
+   }
+   #loginsignup{
+      background-color: #fff;
+      border-radius:25px;
+   }
+
+   .btn{
+   background-color:#F2712A;
+   color:white;
+   font-size:0.8rem
+   }
+
+   body{
+         font-family: 'Montserrat', sans-serif;
+         font-weight: bold;
+         
+      }
+   
+   a{
+      text-decoration: none;
+      
+   }
+
+   h1{
+      font-family: 'Montserrat';
+      font-weight: bold;
+      color:#03989E;
+
+   }
+
+   h2{
+      font-family: "Raleway";
+   }
+
+   #logo{
+      background-color: #03989E;
+      color:white;
+      font-weight: bold;
+   }
+
+   input::placeholder{
+      font-size: 0.8rem
+   }
+
+   #formlogin{
+      background-color:#F1F2F4;
+   }
+
+   #loginform{
+      margin-left: 150px;
+   }
+</style>
+<body>
+   <div class = 'container-fluid'>
+      <div class = 'row justify-content-between'>
+         <div class = 'col-md-4 position-relative' id = 'logo'>
+            <div id = 'logoinner'>
+            <a href = 'index.html'><img src="/static/images/logo3.png" alt="thelawlistlogo" style = 'height:70px' class = 'img-fluid'></a>
+            <h2>Join our community of lawyers helping lawyers across Nigeria.</h2>
+            </div>
+         </div>
+         <div class = 'col-md-8 position-relative p-5' id = 'formlogin'>
+            
+            <div class = 'col-md-12 position-relative ms-1 p-5 mb-5' id = 'loginsignup'>
+               <h2>Regsistration Successful!</h2>
+               <p>Welcome to The Lawlist community! Sign in to your account.</p>
+               <a href="{{url_for('login')}}" class="btn">Login to your account!</a>
+            </div>
+
+      </div>
+   </div>
+   <script src = "/static/jquery.min.js"></script>
+   <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+   <script src = "/static/bootstrap/js/bootstrap.bundle.js"></script>
+   {% block js%}
+
+   {% endblock js%}
+</body>
+</html>

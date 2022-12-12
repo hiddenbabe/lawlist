@@ -1,0 +1,143 @@
+{% extends("mainlayout.html")%}
+{% block content %}
+<div class="row">
+   <div class="col-md-9">
+   <h1 class="ms-5 mt-3">Get Started</h1>
+   </div>
+</div>
+<div class="container">
+<div class="row main-content-post-job">
+   <div class="col-md-12">
+      <form method="post" action="{{url_for('post_job')}}">
+         {{form.csrf_token}}
+         <p >1. What is the duration of your job?</p>
+         <div class="row justify-content-center">
+            <div class="col-md-3 option me-5 ms-2 p-2">
+            <input type="radio" name="duration" id="shortterm" class="required">
+            <label for="shortterm" class="ms-5">Short Term(Less than 20hrs a week)</label>
+            </div>
+            <div class="col-md-3 option p-2">
+            <input type="radio" name="duration" id="longterm" class="required">
+            <label for="longterm" class="ms-5">Long Term(More than 20hrs a week)</label>
+            </div>
+         </div>
+         <p >2. Specify the timeline of your job: </p>
+         <div class="row justify-content-center">
+            <div class="col-md-3 option me-5 ms-2 p-2">
+            <label class="ms-5">Start Date:</label>
+            <input type="datetime-local" name="startdate" class="form-control text-center required" required>
+            </div>
+            <div class="col-md-3 option p-2">
+            <label class="ms-5" for="enddate">End Date:</label>
+            <input type="datetime-local" name="enddate" id="enddate" class="form-control text-center required">
+            </div>
+         </div>
+         <p class="mt-5">3. {{form.title.label}}</p>
+         <div class="row justify-content-center">
+            <div class="col-md-9 me-5 ms-2 p-2">
+            {{form.title (class_="form-control")}}
+            </div>
+         </div>
+         <p class="mt-4">4. Which category of services are you interested in?</p>
+         <div class="row justify-content-center">
+            <div class="col-md-9 me-5 ms-2 p-2">
+            <select name="category" class="form-control text-center required" id="category" required>
+            <option value="">Select Category</option>
+            {% for category in categories%}
+               <option value="{{category.category_id}}">{{category.category_name}}</option>
+            {%endfor%}
+            <option value="both">Both</option>
+            </select>
+            </div>
+         </div>
+         <p>5. Select services required for your work <em style="font-size:0.7em">(Specify category above to see corresponding services)</em> : </p>
+         <div class="row justify-content-center text-center">
+            <div class='col-md-7 me-5 ms-2' id="services">
+            </div>
+         </div>
+         <p>6. Your Budget</p>
+         <div class="row justify-content-center">
+            <div class="col-md-3 me-5 ms-2 p-2">
+            <label for="lowprice" class="ms-5">Lowest Price (&#x20A6;):</label>
+            <input type="number" name="lowprice" id="lowprice" class="form-control required" value="1000" min="1000.00" step="500" required>
+            </div>
+            <div class="col-md-3 p-2">
+            <label for="highprice" class="ms-5">Highest Price (&#x20A6;):</label>
+            <input type="number" min="1000.00" step="500" name="highprice" id="highprice" class="form-control required" required>
+            </div>
+         </div>
+         <p class="mt-4">6. What is your case about? <em style="font-size:0.8em">(Give a brief description about the case and explain the nature of the job you are offering)</em> </p>
+         
+         <div class="row justify-content-center">
+         
+            <div class="col-md-9 me-5 ms-2 p-2">
+               {% for error in form.description.errors %}<br>
+               <span style="color: red;">{{ error }}</span>
+
+               {% endfor %}
+               {{form.description (class_="form-control")}}
+               </div>
+         </div>
+         <p>5. Looking for a lawyer located in:</p>
+         <div class="row justify-content-center">
+            <div class="col-md-9 me-5 ms-2 p-2">
+            <select class = 'mb-3 form-control required' name="state" id="state" required>
+               {% if states%}
+               {% for i in states %}
+                  <option value="{{i.state_id}}">{{i.state_name}}</option>
+               {% endfor %}
+               {% endif %}
+            </select>
+            </div>
+         </div>
+         <div class="row justify-content-center">
+            <div class="col-md-9 me-5 ms-2 p-2">
+            <p id="notapproved" class="text-danger"></p>
+            {{form.submit (class_="btn col-md-12",id="btnpost")}}
+            </div>
+         </div>
+      </form>
+   </div>
+</div>
+</div>
+{% endblock %}
+{% block js %}
+<script>
+   $("document").ready(function(){
+      $(".option").click(function(){
+         $(this>"input").attr("checked","checked")
+      })
+
+      $("#category").change(function(){
+         var selected_category = $(this).val()
+         var data2send = {"category":selected_category}
+
+         $.ajax({
+         url:"{{url_for('get_services')}}",
+         type:"get",
+         dataType: "text",
+         data: data2send,
+         success: function(msg){
+            $("#services").html(msg)
+         },
+         error: function(err){
+            console.log(err)
+         }
+      })
+      })
+
+      if("{{details.status}}"=="Not Approved"){
+         $("#btnpost").attr("disabled","disabled")
+         
+      }
+      if("{{details.status}}"=="Not Approved"){
+         $("#btnpost").html("You need to complete your profile and your documents need to be approved to submit a bid.")
+      }
+
+      if("{{details.status}}"=="Suspended"){
+         $("#btnpost").attr("disabled","disabled")
+         $("#notapproved").html("Your account has been suspended temporarily, so you are not allowed to post a job on this platform.")
+      }
+   })
+</script>
+{% endblock %}

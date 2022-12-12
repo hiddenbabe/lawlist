@@ -1,0 +1,122 @@
+{% extends("mainlayout.html")%}
+
+{% block content %}
+   {% if details.status == "Not Approved"%}
+   <div class="row justify-content-center" id="welcomemsgdiv">
+      <div class="col-md-11 mt-3 position-relative" id="welcomemsg" >
+         <i class="fa-solid fa-x closebtn"></i>
+         <h3 class="mt-2">Congratulations {{details.user_fname}} ! You are now a part of the lawlist.</h3>
+         <h5>To get started:</h5>
+         <ul>
+            <li class="mb-2">You need to <a href="#">complete your profiile</a> and review to provide services to other lawyers.</li>
+            <li class="mb-2">Once you complete your profile you can check out <a href="#">available jobs in your area</a>.</li>
+            <li class="mb-2">Need a job done? <a href="#">Post your first job.</a></li>
+         </ul>
+      </div>
+   </div>
+   {% endif %}
+   {% if details.status == "Suspended"%}
+   <div class="row justify-content-center" id="welcomemsgdiv">
+      <div class="col-md-11 mt-3 position-relative" id="welcomemsg" >
+         <h3 class="mt-2 text-danger">Your account has been temporarily suspended.</h3>
+         <ul>
+            <li class="mb-2">You can not provide services to other lawyers</li>
+            <li class="mb-2">You also can not post a job on this platform</li>
+            <li class="mb-2"><a href="#">Disagree with this?</a></li>
+         </ul>
+      </div>
+   </div>
+   {% endif %}
+   <div class="container">
+      <div class="row">
+         <div class="col-md-9">
+         <h1 class="ms-5 mt-2">Your Dashboard</h1>
+         </div>
+      </div>
+      <div class="row justify-content-center mt-2">
+         <div class="col-md-11 mt-3 position-relative"  >
+            <div class="search-box">
+               <button class="btn-search"><i class="fa-solid fa-search"></i></button>
+               <input type="text" class="input-search" placeholder="Type to Search...">
+             </div>        
+         </div>
+      </div>
+   <div class="row" id="maincontent">
+      <div class="col-md-7 p-3 leftdiv" >
+        <h3 class="p-2 mt-2">Jobs You Might Be Interested In</h3>
+        <hr>
+        <p>View jobs in your location, based on the services that you offer. Ordered by most relevant.</p>
+        <hr>
+        <div class="post">
+        <h2 class="mt-5"><a href="#">Non Litigation Work</a></h2>
+         <p>Services Needed: Drafting of pleadings, Writing Reports.</p>
+         <p>Budget: 10k-15k -Est Time:17/10/2022-28/10/22, 20hrs a Week Posted 10 mins ago.</p>
+         <p><i class="fa-solid fa-location-dot"></i> Abuja, Nigeria</p>
+         <br>
+         <p id="postcontent">Need a strong minded lawyer to assist me in a case that I am working on, lawyer needs to be based in Abuja Nigeria</p>
+         <a href="#" class="badge p-2" style="background-color:#03989E; color:white">Non-litigation</a>
+         <a href="#" class="badge p-2" style="background-color:#03989E; color:white">Report Writing</a>
+         <a href="#" class="badge p-2" style="background-color:#03989E; color:white">Family Law</a>
+         <p>Bids:10</p>
+        </div>
+      </div>
+      <div class="col-md-3 rightdiv text-center mt-5">
+         
+         {% if details.user_image %}
+            <img src="/static/uploads/{{details.user_image}}" class="user-pic">
+            {% else %}
+            <i class="fa-regular fa-user user-icon mt-3 mb-2 text-dark"></i>
+            {% endif %}
+         <h2>{{details.user_fname}} {{details.user_lname}}</h2>
+         {% if details.law_firm_name%}
+         <h5>{{details.law_firm_name}}</h5>
+         {% endif %}
+         
+      </div>
+   </div>
+   <div class="row">
+   <div class="col-md-7 leftdiv p-3 mt-5" >
+      <h3 class="p-2 mt-2">Job Postings</h3>
+      {% if activejobs%}
+
+      {%else%}
+      <p>No active job posts yet.</p>
+      <p>Outsource to our network of lawyers and make working easier</p>
+      <a href="{{url_for('post_job')}}" class="btn text-light" >Post a Job</a>
+      {% endif %}
+      <hr>
+    </div>
+    </div>
+</div>
+{% endblock %}
+{% block js %}
+<script type="text/javascript">
+   $(document).ready(function(){
+      $("#services").hide()
+
+      $(".closebtn").click(function(){
+         $("#welcomemsgdiv").hide()
+      })
+
+      $("#addsrvc").click(function(){
+         $("#services").show()
+         var services = "{{details.user_id}}"
+         var data2send = {"user":services}
+
+         $.ajax({
+         url:"{{url_for('home_services')}}",
+         type:"get",
+         dataType: "text",
+         data: data2send,
+         success: function(msg){
+            $("#services").html(msg)
+         },
+         error: function(err){
+            console.log(err)
+         }
+      })
+      })
+   
+   })
+</script>
+{% endblock %}

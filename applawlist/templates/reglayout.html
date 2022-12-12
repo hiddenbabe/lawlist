@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <link rel="preconnect" href="https://fonts.googleapis.com">
+   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+   <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet'>
+   <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@100&display=swap" rel="stylesheet">
+   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk&display=swap" rel="stylesheet">
+   <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab&display=swap" rel="stylesheet">
+   <link href = "/static/bootstrap/css/bootstrap.css" rel = "stylesheet" type = "text/css">
+   <link href = "/static/fontawesome/css/all.css" rel = "stylesheet" type = "text/css">
+   <link href = '/static/animate.min.css' type = 'text/css' rel = 'stylesheet'>
+   
+   <title>{{name}} - The Lawlist</title>
+</head>
+<body>
+   <div class = 'container-fluid'>
+      <div class = 'row justify-content-between'>
+         <div class = 'col-md-4 position-relative' id = 'logo'>
+            <div id = 'logoinner'>
+            <a href = 'index.html'><img src="/static/images/logo3.png" alt="thelawlistlogo" style = 'height:70px' class = 'img-fluid'></a>
+            <h2>Join our community of lawyers helping lawyers across Nigeria.</h2>
+            </div>
+         </div>
+         <div class = 'col-md-8 position-relative p-5' id = 'formlogin'>
+            <div class = 'col-md-11 text-md-end mt-2'>
+               
+               <span id = 'span1'>{% block account %}Don't have an account?{% endblock %}</span>
+               
+               <button class = 'p-2 animate__animated btn' style = 'font-weight:bold; border:0px;color:white;' id = 'signup'><a href="/thelawlist/signup/" class="text-light">SIGN UP</a></button>
+               <button class = 'p-2 animate__animated btn' style = 'font-weight:bold; border:0px; color:white;' id = 'loginbtn'><a href="/thelawlist/login/"class="text-light">LOGIN</a></button>
+            </div>
+            <div class = 'col-md-12 position-relative ms-1 p-5 mb-5' id = 'loginsignup'>
+               <div class = 'col-md-12 p-2' id = 'formsignup'>
+                  <div  class = 'animate__animated '>
+                     <form method="post" action="/thelawlist/signup/" id = 'regform' >
+                     <h1 id = 'heading1' class="text-center">Create Your Account</h1>
+                     <p class="text-center"><em>( <span style="color:red">*</span> fields are required )</em></p>
+                     <input type="hidden" name="csrf_token" value="{{csrf_token()}}">
+                     <div class="row">
+                     <div class = 'col-md-6 mb-5 page'>
+                        <div class = ''>
+                           <label class = 'form-label'>First Name <span style="color:red">*</span> :</label>
+                           {{form.fname (class_="form-control mb-3 req",placeholder='First Name')}}
+                        </div>
+                        <div class = ''>
+                           <label class = 'form-label'>Last Name <span style="color:red">*</span> :</label>
+                           {{form.lname (class_="form-control mb-3 req",placeholder='Last Name')}}
+                        </div>
+                        <div class = ''>
+                           <label class = 'form-label'>Middle Name <span style="color:red">*</span> :</label>
+                           {{form.mname (class_="form-control mb-3 req",placeholder='Middle Name')}}
+                        </div>
+                        <!-- <button class = 'mt-2 next btn' type="button">Next</button> -->
+                        <div>
+                           <label class = 'form-label'>Enter Phone Number <span style="color:red">*</span> :</label>
+                           <input type = 'text' class = 'form-control mb-3 req' placeholder = '+234XXXXXXXXXX' name="phone" id="phone">
+                           <p class="text-danger" id="numbererror"></p>
+                        </div>
+                        <div>
+                           <label class = 'form-label'>Enter email address <span style="color:red">*</span> :</label>
+                           {{form.email (class_="form-control mb-3 req",placeholder = 'name@something.com',pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$")}}
+                           <p class="text-danger" id="emailerror"></p>
+                        </div>
+                        <div>
+                           <label class = 'form-label'>Type of practice <span style="color:red">*</span> :</label>
+                           <select class = 'form-control mb-3 req' name="practice">
+                              <option disabled selected value = ''>--Select Practice--</option>
+                              <option value = 'Single Practice'>Single Practice</option>
+                              <option value = 'Law Firm'>Law Firm</option>
+                           </select>
+                        </div>
+                        <div>
+                           <label class = 'form-label'>Enter Law Firm Name (If Applicable):</label>
+                           <input type = 'text' class = 'form-control mb-3' placeholder = 'Law Firm Name' name="lawfirmname">
+                        </div>
+                     </div>
+                     <div class = 'col-md-6 mb-5 page hiddenpage' >
+                        
+                        <div>
+                           <label class = 'form-label'>Address <span style="color:red">*</span> :</label>
+                           <textarea class ='form-control mb-3' name="address"></textarea>
+                        </div>
+                        <div>
+                           <label class = 'form-label'>State of Residence <span style="color:red">*</span> :</label>
+                           <select class = 'mb-3 form-control req' name="state" id="state" >
+                              {% if states%}
+                              {% for i in states %}
+                                 <option value="{{i.state_id}}">{{i.state_name}}</option>
+                              {% endfor %}
+                              {% endif %}
+                           </select>
+                        </div>
+                        <div class="mb-3">
+                           <label class="form-label mt-2" name="lga">LGA <span style="color:red">*</span> :</label>
+                              <select name ='lgas' class="form-control" id="lgas">
+                                 
+                              </select>
+                        </div>
+                        <div>
+                           <label for="dob" class="form-label">Date of Birth <span style="color:red">*</span> :</label>
+                           <input type="date" id="dob" name="dob" value="2018-07-22"
+                           min="1900-01-01" max="2004-00-00" class = 'form-control mb-3 req' name="dob">
+                        </div>
+                        
+                        <div>
+                           <div id="error_message"></div>
+                           <div id="error"></div>
+                           <label class = 'form-label'>Choose password:</label> <i class="fa-regular fa-eye ms-5" id="pwdchange"></i>
+                           {{form.pwd1 (class_="form-control mb-3 req",placeholder = 'Enter password',id="pwd1")}}
+                        </div>
+                        <div>
+                           <label class = 'form-label'>Confirm password:</label>
+                           {{form.pwd2 (class_="form-control mb-3 req",placeholder = 'Confirm password',id="pwd2")}}
+                        </div>
+                    </div>
+                    <button class = 'mt-2 btn' type="submit" id="pwdbtn">Submit</button>
+                     </form>
+                     </div>
+                  </div>
+                  
+               </div>
+                  {%set msg = get_flashed_messages()%}
+                  {%for m in messages%}
+                     {{m}}
+                  {%endfor%}
+                  {% block error %}
+                  {% endblock %}
+                  <form action = '/thelawlist/login/' method = "post"id = 'loginform' class = 'mt-2 animate__animated p-4'>
+                     <input type="hidden" name="csrf_token" value="{{csrf_token()}}">
+                     <h1 id = 'heading1'>Sign Into Your Account</h1>
+                     <div class ='col-md-8 mb-3'>
+                        <label for="logininput" class = 'form-label'name="email">Enter your Email :</label>
+                        <input type="text" name="username" id="username" class="form-control">
+                     </div>
+                     <div class ='col-md-8 mb-3'>
+                        <label for="password"class = 'form-label'name="password">Password : <a class="ms-3" href='#'style ='color:#03989E'>Forgot?</a></label>
+                        <input type="password" name="pwd" id="pwd" tabindex="2" class="form-control">
+                     </div>
+                     <input class="btn col-3" style = ' font-weight:bold;'type="submit" value="Sign In" />
+                  </form>
+               
+            </div>
+      </div>
+   </div>
+   <script src = "/static/jquery.min.js"></script>
+   <script src = "/static/bootstrap/js/bootstrap.bundle.js"></script>
+   {% block js%}
+   <script type = 'text/javascript'>
+
+      $(document).ready(function(){
+         $('#regform').hide()
+
+         $('#loginbtn').hide()
+  
+         $("#state").change(function(){
+         var selected_state = $(this).val()
+         var data2send = {"state":selected_state}
+         $.ajax({
+         url:"{{url_for('login')}}",
+         type:"get",
+         dataType: "text",
+         data: data2send,
+         success: function(msg){
+            $("#lgas").html(msg)
+         },
+         error: function(err){
+            console.log(err)
+         }
+         })
+         })
+
+      
+      
+      })
+   </script>
+   {% endblock js%}
+</body>
+</html>
